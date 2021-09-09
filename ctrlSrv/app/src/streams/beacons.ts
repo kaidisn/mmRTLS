@@ -1,18 +1,17 @@
 import type { Observable } from 'rxjs';
 import { BehaviorSubject, of } from 'rxjs';
-import {
-	catchError,
-	map,
-	scan,
-	withLatestFrom,
-	filter,
-	switchMap,
-	startWith
-} from 'rxjs/operators';
+import { catchError, map, scan, filter, switchMap, switchMapTo } from 'rxjs/operators';
 import { fromFetch } from 'rxjs/fetch';
 import type { Beacon } from '$src/interfaces/beacon.interface';
 import { MarkerType } from './marker.types';
 import type { MarkerOf } from './marker.types';
+
+const DEFAULT_HEADERS = {
+	Accept: 'application/json',
+	'Content-Type': 'application/json'
+};
+
+const DELETE_BEACON_URL = 'http://localhost:3000/beacons/';
 
 /**
  * GET BEACONS
@@ -48,24 +47,13 @@ const beaconReadyToSave$ = creatingBeacon.pipe(
 	filter(isValidBeacon)
 );
 
-const createdBeacon$ = saveBeacon.pipe(
-	withLatestFrom(beaconReadyToSave$),
-	map(([, beacon]) => beacon)
-);
-
-export const newBeaconMarkerCreated$ = createdBeacon$.pipe(
-	map(fromBeaconToMarker),
-	startWith(null)
-);
+const createdBeacon$ = saveBeacon.pipe(switchMapTo(beaconReadyToSave$));
 
 export const savedBeacon$ = createdBeacon$.pipe(switchMap(createBeacon));
 
 export function createBeacon(beacon: Omit<Beacon, 'beaconId'>): Observable<MarkerOf<BeaconInfo>> {
 	const requestConfig = {
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json'
-		},
+		headers: DEFAULT_HEADERS,
 		method: 'POST',
 		body: JSON.stringify(beacon)
 	};
@@ -100,3 +88,24 @@ function fromBeaconToMarker({ beaconId, x, y, ...beacon }: Beacon): MarkerOf<Bea
 		data: beacon
 	};
 }
+
+export const getBeaconId: (beaconMarker: MarkerOf<BeaconInfo>) => number = ({
+	id
+}: MarkerOf<BeaconInfo>) => {
+	const beaconIdMatches = id.match('[0-9]+');
+	if (!beaconIdMatches) {
+		throw 'Invalid Beacon ID';
+	}
+	return +beaconIdMatches[0];
+};
+
+export const deleteBeacon: (beaconId: number) => Observable<boolean> = (beaconId) => {
+	const requestConfig: RequestInit = {
+		headers: DEFAULT_HEADERS,
+		method: 'DELETE'
+	};
+
+	return fromFetch(new Request(DELETE_BEACON_URL + beaconId, requestConfig), {
+		selector: (response) => of(response.ok)
+	}).pipe(catchError(() => of(false))) as Observable<boolean>;
+};

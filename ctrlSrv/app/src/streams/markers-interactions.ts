@@ -15,9 +15,7 @@ type MarkerClickedObservableOf<T> = Observable<MarkerOf<T> | undefined>;
 export const getMarkerClicked = <T>(
 	markers$: MarkersObservableOf<T>
 ): MarkerClickedObservableOf<T> => {
-	const markerClicked = markerSubject.asObservable();
-
-	return markerClicked.pipe(
+	return markerSubject.pipe(
 		withLatestFrom(markers$),
 		map(([markerId, markers]) => {
 			return markers.find((marker) => marker.id === markerId);
@@ -29,18 +27,18 @@ export const getBeaconClicked = (
 	markers$: MarkersObservableOf<MarkerInfo>
 ): MarkerClickedObservableOf<Beacon> =>
 	getMarkerClicked(markers$).pipe(
-		filter((marker): marker is MarkerOf<Beacon> | undefined => {
-			if (marker) return marker.type === MarkerType.BEACON;
-			return true;
-		})
+		filter(
+			(marker): marker is MarkerOf<Beacon> | undefined =>
+				!marker || marker.type === MarkerType.BEACON
+		)
 	);
 
 export const getNavDeviceClicked = (
 	markers$: MarkersObservableOf<MarkerInfo>
 ): MarkerClickedObservableOf<NavDevice> =>
 	getMarkerClicked(markers$).pipe(
-		filter((marker): marker is MarkerOf<NavDevice> | undefined => {
-			if (marker) return marker.type === MarkerType.NAVDEV;
-			return true;
-		})
+		filter(
+			(marker): marker is MarkerOf<NavDevice> | undefined =>
+				!marker || marker.type === MarkerType.NAVDEV
+		)
 	);
