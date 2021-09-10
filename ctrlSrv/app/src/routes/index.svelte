@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 	import { mapBackgroundImage, mapMaxPosition } from '../store/map-background-image.store';
-	import { deleteBeacon as deleteBeaconRequest, getBeaconId } from '$src/streams/beacons';
+	import { deleteBeacon as deleteBeaconRequest } from '$src/streams/beacons';
 
 	const UPLOAD_MAP_ROUTE = '/upload-map';
 
@@ -74,10 +74,10 @@
 	};
 
 	const deleteBeacon = (event: CustomEvent<BeaconDetailsEvent['delete']>) => {
-		const beacon = event.detail;
-		deleteBeaconRequest(getBeaconId(beacon)).subscribe((success) => {
+		const beaconMarker = event.detail;
+		deleteBeaconRequest(beaconMarker.data.id).subscribe((success) => {
 			if (success) {
-				deleteBeaconFromStore(beacon.id);
+				deleteBeaconFromStore(beaconMarker.id);
 			} else {
 				// eslint-disable-next-line no-console
 				console.error('Beacon deletion failed.');

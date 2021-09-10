@@ -19,7 +19,9 @@ const DELETE_BEACON_URL = 'http://localhost:3000/beacons/';
 
 export const BEACON_ICON_URL = './static/markers/antenna.png';
 
-export type BeaconInfo = Omit<Beacon, 'beaconId' | 'x' | 'y'>;
+export interface BeaconInfo extends Omit<Beacon, 'beaconId' | 'x' | 'y'> {
+	id: number;
+}
 
 export const beacons$: Observable<MarkerOf<BeaconInfo>[]> = fromFetch(
 	'http://localhost:3000/beacons',
@@ -85,19 +87,12 @@ function fromBeaconToMarker({ beaconId, x, y, ...beacon }: Beacon): MarkerOf<Bea
 		icon: './static/markers/antenna.png',
 		x,
 		y,
-		data: beacon
+		data: {
+			...beacon,
+			id: beaconId
+		}
 	};
 }
-
-export const getBeaconId: (beaconMarker: MarkerOf<BeaconInfo>) => number = ({
-	id
-}: MarkerOf<BeaconInfo>) => {
-	const beaconIdMatches = id.match('[0-9]+');
-	if (!beaconIdMatches) {
-		throw 'Invalid Beacon ID';
-	}
-	return +beaconIdMatches[0];
-};
 
 export const deleteBeacon: (beaconId: number) => Observable<boolean> = (beaconId) => {
 	const requestConfig: RequestInit = {

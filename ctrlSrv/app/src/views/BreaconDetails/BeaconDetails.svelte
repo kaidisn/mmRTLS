@@ -4,16 +4,16 @@
 	import SmelteDialog from 'smelte/src/components/Dialog';
 
 	import { markerSubject } from '../../streams/markers-interactions';
-	import type { Beacon } from '../../interfaces/beacon.interface';
 	import type { MarkerOf } from '../../streams/marker.types';
 	import { createEventDispatcher } from 'svelte';
 	import type { BeaconDetailsEvent } from './beacon-details.events';
+	import type { BeaconInfo } from '$src/streams/beacons';
 
-	export let beacon: MarkerOf<Beacon> | null = null;
+	export let beacon: MarkerOf<BeaconInfo> | null = null;
 
 	const dispatch = createEventDispatcher<BeaconDetailsEvent>();
 
-	const deleteBeacon = (beacon: MarkerOf<Beacon>) => dispatch('delete', beacon);
+	const deleteBeacon = (beacon: MarkerOf<BeaconInfo>) => dispatch('delete', beacon);
 
 	let deleteDialogOpen = false;
 
@@ -28,7 +28,7 @@
 	const closeDeleteDialog = (confirmed: boolean) => {
 		deleteDialogOpen = false;
 		if (confirmed) {
-			deleteBeacon(beacon as MarkerOf<Beacon>);
+			deleteBeacon(beacon as MarkerOf<BeaconInfo>);
 			onClose();
 		}
 	};
@@ -68,7 +68,7 @@
 		<br />
 	</div>
 	<div slot="actions">
-		<Button color="error" on:click={() => closeDeleteDialog(true)}>Yes</Button>
+		<Button color="primary" outlined on:click={() => closeDeleteDialog(true)}>Yes</Button>
 		<Button color="primary" on:click={() => closeDeleteDialog(false)}>No</Button>
 	</div>
 </SmelteDialog>

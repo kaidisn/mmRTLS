@@ -26,10 +26,5 @@ export const useSaveBeacon = (): (() => void) => {
 };
 
 export const deleteBeaconFromStore: (beaconId: string) => void = (beaconId: string) => {
-	const currentMarkers = [...markersSubject.value];
-	const deletedBeaconIndex = currentMarkers.findIndex((beacon) => beacon.id === beaconId);
-	if (deletedBeaconIndex >= 0) {
-		currentMarkers.splice(deletedBeaconIndex, 1);
-		markersSubject.next(currentMarkers);
-	}
+	markersSubject.next(markersSubject.value.filter(marker => marker.id !== beaconId));
 };
