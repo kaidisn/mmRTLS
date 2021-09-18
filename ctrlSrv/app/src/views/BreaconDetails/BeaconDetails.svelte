@@ -1,40 +1,38 @@
 <script lang="ts">
-	import Button from 'smelte/src/components/Button';
+	import { createEventDispatcher } from 'svelte';
+	import Button from 'smelte/src/components/Button/Button.svelte';
 	import Dialog from '../../components/Dialog/Dialog.svelte';
-	import SmelteDialog from 'smelte/src/components/Dialog';
 
 	import { markerSubject } from '../../streams/markers-interactions';
 	import type { MarkerOf } from '../../streams/marker.types';
-	import { createEventDispatcher } from 'svelte';
-	import type { BeaconDetailsEvent } from './beacon-details.events';
 	import type { BeaconInfo } from '$src/streams/beacons';
+	import BeaconDelete from '../BeaconDelete/BeaconDelete.svelte';
+	import MenuActions from '$src/components/Menu/MenuActions';
+	import { createMenuActionsStream } from '$src/components/Menu/menu.stream';
+
+	type Events = {
+		edit: MarkerOf<BeaconInfo>;
+	};
+
+	const dispatch = createEventDispatcher<Events>();
+	const isEditBeaconEnabled$ = createMenuActionsStream(MenuActions.EDIT);
 
 	export let beacon: MarkerOf<BeaconInfo> | null = null;
-
-	const dispatch = createEventDispatcher<BeaconDetailsEvent>();
-
-	const deleteBeacon = (beacon: MarkerOf<BeaconInfo>) => dispatch('delete', beacon);
-
-	let deleteDialogOpen = false;
 
 	function onClose(): void {
 		markerSubject.next(null);
 	}
 
-	function deleteCurrentBeacon(): void {
-		deleteDialogOpen = true;
+	function onEdit(): void {
+		if (beacon) dispatch('edit', beacon);
 	}
-
-	const closeDeleteDialog = (confirmed: boolean) => {
-		deleteDialogOpen = false;
-		if (confirmed) {
-			deleteBeacon(beacon as MarkerOf<BeaconInfo>);
-			onClose();
-		}
-	};
 </script>
 
-<Dialog isVisible={!!(beacon && beacon.data)} fullHeight={true} on:close={onClose}>
+<Dialog
+	isVisible={!$isEditBeaconEnabled$ && !!(beacon && beacon.data)}
+	fullHeight={true}
+	on:close={onClose}
+>
 	<h3>{beacon?.data.name}</h3>
 	<section class="flex items-center gap-4 py-8">
 		<img class="h-16 w-16" src={beacon?.icon} alt="beacon icon" />
@@ -57,27 +55,6 @@
 			</li>
 		</ul>
 	</section>
-	<Button color="error" on:click={deleteCurrentBeacon}>Delete Beacon</Button>
+	<BeaconDelete {beacon} on:deleted={onClose} />
+	<Button on:click={onEdit}>Edit</Button>
 </Dialog>
-
-<SmelteDialog bind:value={deleteDialogOpen}>
-	<div class="delete-beacon-title" slot="title">
-		Are you sure you wish to delete this beacon?
-		<br />
-		This operation is <strong>irreversible</strong>.
-		<br />
-	</div>
-	<div slot="actions">
-		<Button color="primary" outlined on:click={() => closeDeleteDialog(true)}>Yes</Button>
-		<Button color="primary" on:click={() => closeDeleteDialog(false)}>No</Button>
-	</div>
-</SmelteDialog>
-
-<style>
-	:global(.z-30) {
-		z-index: var(--map-z-index);
-	}
-	.delete-beacon-title {
-		font-weight: initial;
-	}
-</style>

@@ -1,11 +1,12 @@
 import { MarkerType } from './marker.types';
+import type { MarkerInfo } from './marker.types';
 import type { MarkerOf } from './marker.types';
 import type { NavDevice } from 'src/interfaces/nav-device.interface';
 import { catchError, map, of } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 
-export type NavDeviceInfo = Omit<NavDevice, 'navId' | 'positions'>;
+export type NavDeviceInfo = MarkerInfo & Omit<NavDevice, 'navId' | 'positions'>;
 
 export const navDevices$: Observable<MarkerOf<NavDeviceInfo>[]> = fromFetch(
 	generateGetNavDeviceURL('http://localhost:3000/nav-devs'),
@@ -61,6 +62,9 @@ function fromNavDeviceToMarker({
 		icon: './static/markers/location.png',
 		x: positions[0].x,
 		y: positions[0].y,
-		data: navDevice
+		data: {
+			id: navId,
+			...navDevice
+		}
 	};
 }

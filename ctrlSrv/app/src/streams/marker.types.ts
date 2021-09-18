@@ -14,7 +14,11 @@ export interface Marker {
 
 export type Position = Pick<Marker, 'x' | 'y'>;
 
-export interface MarkerOf<T> extends Marker {
+export interface MarkerInfo {
+	id: number;
+}
+
+export interface MarkerOf<T extends MarkerInfo> extends Marker {
 	data: T;
 }
 

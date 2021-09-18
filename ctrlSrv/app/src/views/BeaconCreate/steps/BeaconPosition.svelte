@@ -12,9 +12,10 @@
 	const { next, previous } = createStepNavigationEvents();
 
 	const map = MapContext.get();
+	const defaultBeacon = creatingBeacon.getValue();
 
-	let positionX = map.getCenter().x;
-	let positionY = map.getCenter().y;
+	let positionX = defaultBeacon?.x || map.getCenter().x;
+	let positionY = defaultBeacon?.y || map.getCenter().y;
 
 	onMount(() => {
 		const beacon = creatingBeacon.getValue();
@@ -35,7 +36,8 @@
 	function setPosition(position: Position) {
 		positionX = position.x;
 		positionY = position.y;
-		creatingBeacon.next({ x: positionX, y: positionY });
+		const beacon = creatingBeacon.getValue();
+		creatingBeacon.next({ ...beacon, x: positionX, y: positionY });
 	}
 
 	function onDrag(e: CustomEvent<DragEventDetail>): void {

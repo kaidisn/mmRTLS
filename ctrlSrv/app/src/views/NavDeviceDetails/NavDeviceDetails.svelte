@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { NavDevice } from '../../interfaces/nav-device.interface';
-	import type { MarkerOf } from '../../streams/marker.types';
 	import Dialog from '../../components/Dialog/Dialog.svelte';
 	import { markerSubject } from '../../streams/markers-interactions';
 
-	export let navDevice: MarkerOf<NavDevice> | null = null;
+	import type { MarkerOf } from '../../streams/marker.types';
+	import type { NavDeviceInfo } from '$src/streams/navdev';
+
+	export let navDevice: MarkerOf<NavDeviceInfo> | null = null;
 
 	function onClose() {
 		markerSubject.next(null);

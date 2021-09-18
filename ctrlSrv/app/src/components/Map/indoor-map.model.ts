@@ -18,14 +18,12 @@ export class IndoorMap<T extends Marker> implements IConfigurableIndoorMap<T> {
 		y: 100
 	};
 
-	constructor(
-		nativeElement: HTMLElement,
-		backgroundImage?: HTMLImageElement,
-		private defaultIconConfig: MarkerIconSizeOptions = {
-			origin: [16, 32],
-			size: 32
-		}
-	) {
+	private defaultIconConfig: MarkerIconSizeOptions = {
+		origin: [16, 32],
+		size: 32
+	};
+
+	constructor(nativeElement: HTMLElement, backgroundImage?: HTMLImageElement) {
 		this.leafletMap = this.leaflet.map(nativeElement, {
 			crs: this.leaflet.CRS.Simple,
 			center: [0, 0],
@@ -46,7 +44,7 @@ export class IndoorMap<T extends Marker> implements IConfigurableIndoorMap<T> {
 		}
 	}
 
-	public addMarker(marker: T, config?: Partial<MarkerConfig>): IndoorMapMarker {
+	public addMarker(marker: T, config: Partial<MarkerConfig>): IndoorMapMarker {
 		const { id } = marker;
 		const newMarker = new IndoorMapMarker(marker, {
 			...config,

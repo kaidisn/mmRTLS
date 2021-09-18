@@ -51,6 +51,10 @@ export class IndoorMapMarker {
 		map.addLayer(this.leafletRef);
 	}
 
+	public setDisabled(disabled: boolean): void {
+		this.leafletRef.setOpacity(disabled ? 0.5 : 1);
+	}
+
 	public setPosition({ x, y }: Position): void {
 		this.setMarkerPosition({ x, y });
 		this.leafletRef.setLatLng([y, x]);

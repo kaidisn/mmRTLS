@@ -1,18 +1,18 @@
 import { Subject } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
-import type { NavDevice } from 'src/interfaces/nav-device.interface';
 import type { MarkerOf } from './marker.types';
 import { MarkerType } from './marker.types';
 import type { MarkerInfo } from './markers';
 import type { BeaconInfo } from './beacons';
+import type { NavDeviceInfo } from './navdev';
 
 export const markerSubject = new Subject<string | null>();
 
-type MarkersObservableOf<T> = Observable<MarkerOf<T>[]>;
-type MarkerClickedObservableOf<T> = Observable<MarkerOf<T> | undefined>;
+type MarkersObservableOf<T extends MarkerInfo> = Observable<MarkerOf<T>[]>;
+type MarkerClickedObservableOf<T extends MarkerInfo> = Observable<MarkerOf<T> | undefined>;
 
-export const getMarkerClicked = <T>(
+export const getMarkerClicked = <T extends MarkerInfo>(
 	markers$: MarkersObservableOf<T>
 ): MarkerClickedObservableOf<T> => {
 	return markerSubject.pipe(
@@ -35,10 +35,10 @@ export const getBeaconClicked = (
 
 export const getNavDeviceClicked = (
 	markers$: MarkersObservableOf<MarkerInfo>
-): MarkerClickedObservableOf<NavDevice> =>
+): MarkerClickedObservableOf<NavDeviceInfo> =>
 	getMarkerClicked(markers$).pipe(
 		filter(
-			(marker): marker is MarkerOf<NavDevice> | undefined =>
+			(marker): marker is MarkerOf<NavDeviceInfo> | undefined =>
 				!marker || marker.type === MarkerType.NAVDEV
 		)
 	);

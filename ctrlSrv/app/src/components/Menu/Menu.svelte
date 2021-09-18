@@ -9,7 +9,7 @@
 
 	export const items = [
 		{ value: MenuActions.CREATE, text: 'Create a beacon' },
-		{ value: MenuActions.EDIT, text: 'Edit a beacon' },
+		{ value: MenuActions.EDIT, text: 'Edit a beacon' }
 	];
 
 	interface Events {
