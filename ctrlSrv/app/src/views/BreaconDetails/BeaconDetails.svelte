@@ -1,30 +1,39 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import Button from 'smelte/src/components/Button/Button.svelte';
-	import Dialog from '../../components/Dialog/Dialog.svelte';
+	import Dialog from '$src/components/Dialog/Dialog.svelte';
 
-	import { markerSubject } from '../../streams/markers-interactions';
-	import type { MarkerOf } from '../../streams/marker.types';
-	import type { BeaconInfo } from '$src/streams/beacons';
+	import type { BeaconInfo, MarkerOf } from '$src/streams/markers/types';
+	import { BeaconController } from '$src/streams/beacons/beacons.controller';
 	import BeaconDelete from '../BeaconDelete/BeaconDelete.svelte';
-	import MenuActions from '$src/components/Menu/MenuActions';
-	import { createMenuActionsStream } from '$src/components/Menu/menu.stream';
+	import Actions from '$src/components/Menu/Actions';
+	import { createMenuActionsStream, menuActions } from '$src/components/Menu/menu.stream';
+	import { MapMarkerController } from '$src/streams/markers/markers.controller';
 
-	type Events = {
-		edit: MarkerOf<BeaconInfo>;
-	};
-
-	const dispatch = createEventDispatcher<Events>();
-	const isEditBeaconEnabled$ = createMenuActionsStream(MenuActions.EDIT);
+	const isEditBeaconEnabled$ = createMenuActionsStream(Actions.EDIT);
 
 	export let beacon: MarkerOf<BeaconInfo> | null = null;
 
 	function onClose(): void {
-		markerSubject.next(null);
+		MapMarkerController.unselect();
 	}
 
 	function onEdit(): void {
-		if (beacon) dispatch('edit', beacon);
+		if (!beacon) return;
+
+		menuActions.next(Actions.EDIT);
+
+		const {
+			x,
+			y,
+			data: { id, ...markerData }
+		} = beacon;
+
+		BeaconController.add({
+			beaconId: id,
+			x,
+			y,
+			...markerData
+		});
 	}
 </script>
 
@@ -55,6 +64,6 @@
 			</li>
 		</ul>
 	</section>
-	<BeaconDelete {beacon} on:deleted={onClose} />
+	<BeaconDelete {beacon} />
 	<Button on:click={onEdit}>Edit</Button>
 </Dialog>

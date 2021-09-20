@@ -4,10 +4,10 @@
 	import Dialog from '$src/components/Dialog/Dialog.svelte';
 	import { createStepNavigationEvents } from './steps.events';
 	import type { Beacon } from '$src/interfaces/beacon.interface';
-	import { creatingBeacon } from '$src/streams/beacons';
+	import { BeaconController } from '$src/streams/beacons/beacons.controller';
 
 	const { next, previous } = createStepNavigationEvents();
-	const defaultBeacon = creatingBeacon.getValue();
+	const defaultBeacon = BeaconController.get();
 
 	let form = {
 		mac: {
@@ -53,7 +53,7 @@
 		const formElement = e.target as HTMLFormElement;
 		const formData = new FormData(formElement);
 
-		const prevBeacon = creatingBeacon.getValue();
+		const prevBeacon = BeaconController.get();
 
 		const beacon: Partial<Beacon> = {
 			...prevBeacon,
@@ -63,7 +63,7 @@
 			channel: parseInt(formData.get('channel') as string, 10)
 		};
 
-		creatingBeacon.next(beacon);
+		BeaconController.add(beacon);
 
 		next();
 	}

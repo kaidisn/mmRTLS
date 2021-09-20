@@ -38,65 +38,44 @@
 	import Marker from '../components/Map/Marker.svelte';
 	import Map from '../components/Map/Map.svelte';
 	import { Menu } from '$src/components/Menu/Menu';
-	import { MenuActions } from '$src/components/Menu/Menu';
+	import Actions from '$src/components/Menu/Actions';
 	import BeaconDetails from '../views/BreaconDetails/BeaconDetails.svelte';
 	import NavDeviceDetails from '../views/NavDeviceDetails/NavDeviceDetails.svelte';
-	import BeaconCreate from '../views/BeaconCreate/BeaconCreate.svelte';
-	import { onMount$ } from '../utils/lifecycles';
-	import { getMarkers } from '../streams/markers';
+	import BeaconSave from '..../views/BeaconSave/BeaconCreate.svelte';
+	import { MapMarkerController } from '../streams/markers/markers.controller';
 	import type { IIndoorPosition } from '$src/interfaces/position.interface';
-	import {
-		getBeaconClicked,
-		getNavDeviceClicked,
-		markerSubject
-	} from '$src/streams/markers-interactions';
 	import { createMenuActionsStream, menuActions } from '$src/components/Menu/menu.stream';
-	import { MarkerType } from '$src/streams/marker.types';
-	import type { Marker as IMarker, MarkerOf } from '$src/streams/marker.types';
-	import type { BeaconInfo } from '$src/streams/beacons';
-	import { creatingBeacon } from '$src/streams/beacons';
+	import { MarkerType } from '$src/streams/markers/types';
+	import type { Marker as IMarker } from '$src/streams/markers/types';
+	import { BeaconController } from '$src/streams/beacons/beacons.controller';
+	import { useMarkers } from '$src/streams/markers/use-markers';
 
 	export let mapSize: IIndoorPosition;
 	export let backgroundImage: string;
 
-	const markers$ = onMount$.pipe(getMarkers);
+	useMarkers();
 
-	const beaconsMarkerClicked$ = getBeaconClicked(markers$);
-	const navDeviceMarkerClicked$ = getNavDeviceClicked(markers$);
+	const markers$ = MapMarkerController.get();
+
+	const currentModifiedBeacon$ = BeaconController.getObservable();
+
+	const beaconsMarkerClicked$ = MapMarkerController.getBeaconSelected();
+	const navDeviceMarkerClicked$ = MapMarkerController.getNavDeviceSelected();
 
 	const onMarkerClick = (e: CustomEvent<{ id: IMarker['id'] }>) => {
-		const { id } = e.detail;
-		markerSubject.next(id);
+		MapMarkerController.select(e.detail.id);
 	};
 
-	const isCreateBeaconEnabled$ = createMenuActionsStream([MenuActions.CREATE, MenuActions.EDIT]);
-	const onChange = (e: CustomEvent<MenuActions>) => {
+	const isSaveBeaconExperience$ = createMenuActionsStream([Actions.CREATE, Actions.EDIT]);
+	const onChange = (e: CustomEvent<Actions>) => {
 		menuActions.next(e.detail);
 	};
-
-	function onBeaconEdit(e: CustomEvent<MarkerOf<BeaconInfo>>) {
-		menuActions.next(MenuActions.EDIT);
-		const marker = e.detail;
-
-		const {
-			x,
-			y,
-			data: { id, ...markerData }
-		} = marker;
-
-		creatingBeacon.next({
-			beaconId: id,
-			x,
-			y,
-			...markerData
-		});
-	}
 </script>
 
 <div class="container">
 	<Map {backgroundImage} {mapSize} editMode={false}>
 		<Menu on:choose={onChange} />
-		{#if $isCreateBeaconEnabled$} <BeaconCreate /> {/if}
+		{#if $isSaveBeaconExperience$} <BeaconSave /> {/if}
 		{#each $markers$ as { x, y, id, icon, data, type } (id)}
 			<Marker
 				{x}
@@ -104,10 +83,10 @@
 				{id}
 				{icon}
 				on:click={onMarkerClick}
-				disabled={$creatingBeacon?.beaconId === data.id && type === MarkerType.BEACON}
+				disabled={$currentModifiedBeacon$?.beaconId === data.id && type === MarkerType.BEACON}
 			/>
 		{/each}
 	</Map>
-	<BeaconDetails beacon={$beaconsMarkerClicked$} on:edit={onBeaconEdit} />
+	<BeaconDetails beacon={$beaconsMarkerClicked$} />
 	<NavDeviceDetails navDevice={$navDeviceMarkerClicked$} />
 </div>

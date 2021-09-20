@@ -4,7 +4,7 @@ import type {
 	MarkerOptions as LeafletMarkerOptions,
 	Map as LeafletMap
 } from 'leaflet';
-import type { Marker, Position } from '$src/streams/marker.types';
+import type { Marker, Position } from '$src/streams/markers/types';
 import type { MarkerIconSizeOptions } from '$src/interfaces/marker-icon.interface';
 import type { MarkerConfig } from '$src/interfaces/indoor-map.interface';
 import type { Observer, Subscription } from 'rxjs';

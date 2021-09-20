@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { MarkerType } from '$src/streams/marker.types';
-	import type { Marker, Position } from '$src/streams/marker.types';
+	import { MarkerType } from '$src/streams/markers/types';
+	import type { Marker, Position } from '$src/streams/markers/types';
 
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import type { IndoorMapMarker } from './indoor-map-marker.model';

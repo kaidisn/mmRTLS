@@ -5,7 +5,7 @@ import type { IIndoorPosition } from '$src/interfaces/position.interface';
 import type { MarkerIconSizeOptions } from '$src/interfaces/marker-icon.interface';
 import { IndoorMapMarker } from './indoor-map-marker.model';
 import { loadImage } from '../../utils/load-image.function';
-import type { Marker } from '$src/streams/marker.types';
+import type { Marker } from '$src/streams/markers/types';
 
 export class IndoorMap<T extends Marker> implements IConfigurableIndoorMap<T> {
 	private readonly leaflet = Leaflet.get();

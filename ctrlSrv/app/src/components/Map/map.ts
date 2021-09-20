@@ -1,4 +1,4 @@
-import type { Marker } from '$src/streams/marker.types';
+import type { Marker } from '$src/streams/markers/types';
 import type { MarkerIconSizeOptions } from 'src/interfaces/marker-icon.interface';
 import { loadImage } from '../../utils/load-image.function';
 import { IndoorMap } from './indoor-map.model';

@@ -1,14 +1,10 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import Button from 'smelte/src/components/Button/Button.svelte';
 	import Dialog from 'smelte/src/components/Dialog';
 	import ProgressCircular from 'smelte/src/components/ProgressCircular';
-	import { deleteBeaconFromStore } from '$src/views/BeaconCreate/beacon.hook';
-	import { deleteBeacon } from '$src/streams/beacons';
+	import { BeaconService } from '$src/streams/beacons/beacon-service';
 
-	import type { BeaconDeleteEvent } from './beacon-detele.events';
-	import type { MarkerOf } from '$src/streams/marker.types';
-	import type { BeaconInfo } from '$src/streams/beacons';
+	import type { BeaconInfo, MarkerOf } from '$src/streams/markers/types';
 
 	enum DELETE_STATUS {
 		INITIAL,
@@ -19,8 +15,6 @@
 		ERROR,
 		DONE
 	}
-
-	const dispatch = createEventDispatcher<BeaconDeleteEvent>();
 
 	export let beacon: MarkerOf<BeaconInfo> | null;
 
@@ -48,30 +42,26 @@
 			case DELETE_STATUS.CONFIRMED:
 				saveDeletedBeacon();
 				return;
-			case DELETE_STATUS.DONE:
-				removeBeacon();
+			case DELETE_STATUS.ERROR:
+				// eslint-disable-next-line no-console
+				console.error('Beacon deletion failed.');
 				return;
 			default:
 				return;
 		}
 	}
 
-	function removeBeacon() {
-		if (!beacon) return;
-		deleteBeaconFromStore(beacon.id);
-		dispatch('deleted');
-	}
-
 	function saveDeletedBeacon() {
 		if (!beacon) return;
 		setStatus(DELETE_STATUS.FETCHING);
-		deleteBeacon(beacon.data.id).subscribe((success) => {
+		const { x, y } = beacon;
+		const { id: beaconId, ...beaconData } = beacon.data;
+		const removedBeacon = { x, y, beaconId, ...beaconData };
+		BeaconService.remove(removedBeacon).subscribe((success) => {
 			if (success) {
 				setStatus(DELETE_STATUS.DONE);
 			} else {
 				setStatus(DELETE_STATUS.ERROR);
-				// eslint-disable-next-line no-console
-				console.error('Beacon deletion failed.');
 			}
 		});
 	}

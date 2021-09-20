@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import type MenuActions from './MenuActions';
+import type MenuActions from './Actions';
 
 export const menuActions = new BehaviorSubject<MenuActions | null>(null);
 
