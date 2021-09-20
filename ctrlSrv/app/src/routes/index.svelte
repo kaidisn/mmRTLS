@@ -41,7 +41,7 @@
 	import Actions from '$src/components/Menu/Actions';
 	import BeaconDetails from '../views/BreaconDetails/BeaconDetails.svelte';
 	import NavDeviceDetails from '../views/NavDeviceDetails/NavDeviceDetails.svelte';
-	import BeaconSave from '..../views/BeaconSave/BeaconCreate.svelte';
+	import BeaconSave from '../views/BeaconSave/BeaconSave.svelte';
 	import { MapMarkerController } from '../streams/markers/markers.controller';
 	import type { IIndoorPosition } from '$src/interfaces/position.interface';
 	import { createMenuActionsStream, menuActions } from '$src/components/Menu/menu.stream';
