@@ -417,14 +417,14 @@
     loopback-datasource-juggler "^4.26.0"
     tslib "^2.2.0"
 
-"@loopback/rest-explorer@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.npmjs.org/@loopback/rest-explorer/-/rest-explorer-3.3.0.tgz"
-  integrity sha512-z2/jihrpdCvjYm1C09LBgEQ0Y1YRvlgDKMODmpP34RIRki/hiLoWSTTUKRZXpseBIoJWYTyHookGACTRsy6bBg==
+"@loopback/rest-explorer@^4.0.0":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@loopback/rest-explorer/-/rest-explorer-4.1.2.tgz#75e20715045c8ac03e5943ce7fdc6b0c6923061f"
+  integrity sha512-FuTKkNtlxU2oCj50RnG1z9ZPmSaUuq1RLNyCywK3DEoDVVXhC/cIvtx7x5KfIIDCWuVJZEAu35IfqVns1khg+A==
   dependencies:
     ejs "^3.1.6"
-    swagger-ui-dist "3.48.0"
-    tslib "^2.2.0"
+    swagger-ui-dist "4.10.0"
+    tslib "^2.3.1"
 
 "@loopback/rest@^9.3.0":
   version "9.3.0"
@@ -3924,10 +3924,10 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-swagger-ui-dist@3.48.0:
-  version "3.48.0"
-  resolved "https://registry.npmjs.org/swagger-ui-dist/-/swagger-ui-dist-3.48.0.tgz"
-  integrity sha512-UgpKIQW5RAb4nYRG8B615blmQzct0DNuvtX4904Fe2aMWAVfWeKHKl4kwzFXuBJgr2WYWTwM1PnhZ+qqkLrpPg==
+swagger-ui-dist@4.10.0:
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-4.10.0.tgz#6c947da10ff4ce930b87bc61b251a507ec817c41"
+  integrity sha512-+RBJA/beHLg0hO4rJZIhgUdxmZE7AaNfc11PCSzZdnzkmwSJv8Qg0HZbr7BQPQjkC6z4xVWq2h1itOPk1FQBrA==
 
 table@^6.0.4:
   version "6.7.1"
@@ -3991,6 +3991,11 @@ tslib@^2.0.0, tslib@^2.0.3, tslib@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.2.0.tgz"
   integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==
+
+tslib@^2.3.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.1.tgz#0d0bfbaac2880b91e22df0768e55be9753a5b17e"
+  integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
 
 tsutils@^3.17.1:
   version "3.21.0"
