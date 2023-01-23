@@ -1179,7 +1179,7 @@ fs.realpath@^1.0.0:
 
 fsevents@~2.3.2:
   version "2.3.2"
-  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.1:
@@ -2585,10 +2585,15 @@ svelte-typed-component@^1.1.1:
   resolved "https://registry.npmjs.org/svelte-typed-component/-/svelte-typed-component-1.1.1.tgz"
   integrity sha512-LNqgXQtDeUHU2pXewrjP78NuMbmA4A2F+BAwoT+FS1WsJX6Wq0V/9QYbjWvjZBRI6RNEhcRj2/E7YuQX73NP0Q==
 
-svelte@^3.31.2, svelte@^3.34.0:
-  version "3.42.1"
-  resolved "https://registry.npmjs.org/svelte/-/svelte-3.42.1.tgz"
-  integrity sha512-XtExLd2JAU3T7M2g/DkO3UNj/3n1WdTXrfL63OZ5nZq7nAqd9wQw+lR4Pv/wkVbrWbAIPfLDX47UjFdmnY+YtQ==
+svelte@^3.31.2:
+  version "3.46.5"
+  resolved "https://registry.npmjs.org/svelte/-/svelte-3.46.5.tgz"
+  integrity sha512-T4txpIgYEGTkpFY2KQoqvtDmapu/suHMx0GN2zAImdJ7liEdG29P0XpjcNHnOEU1a4lLJn1WXxreobBSIGdcbQ==
+
+svelte@^3.46.5:
+  version "3.55.1"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.55.1.tgz#6f93b153e5248039906ce5fe196efdb9e05dfce8"
+  integrity sha512-S+87/P0Ve67HxKkEV23iCdAh/SX1xiSfjF1HOglno/YTbSTW7RniICMCofWGdJJbdjw3S+0PfFb1JtGfTXE0oQ==
 
 svgo@^2.3.0:
   version "2.3.1"
